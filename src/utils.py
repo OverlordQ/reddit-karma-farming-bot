@@ -8,6 +8,7 @@ import string
 from config.common_config import ENVAR_PREFIX
 from logs.logger import log
 import urllib.request
+
 ## HELPER VARS
 
 DAY = 86400
@@ -16,19 +17,21 @@ YEAR = 31536000
 
 
 def random_string(length: int) -> str:
-  letters = string.ascii_lowercase
-  return ''.join(random.choice(letters) for i in range(length))
+    letters = string.ascii_lowercase
+    return "".join(random.choice(letters) for i in range(length))
+
 
 def prefer_envar(configs: dict) -> dict:
-  for config in list(configs):
-    config_envar = f"{ENVAR_PREFIX}{config}".lower()
-    if os.environ.get(config_envar):
-      configs[config]=os.environ.get(config_envar)
-      log.info(f"loading {config_envar} from envar. Value: {configs.get(config)}")
-    else:
-      log.debug(f"no environment config for: {config_envar}")
+    for config in list(configs):
+        config_envar = f"{ENVAR_PREFIX}{config}".lower()
+        if os.environ.get(config_envar):
+            configs[config] = os.environ.get(config_envar)
+            log.info(f"loading {config_envar} from envar. Value: {configs.get(config)}")
+        else:
+            log.debug(f"no environment config for: {config_envar}")
 
-  return configs
+    return configs
+
 
 # Checks if the machine has internet and also can connect to reddit
 def check_internet(host="https://reddit.com", timeout=5):
@@ -51,11 +54,11 @@ def get_public_ip():
 
 def bytesto(bytes, to, bsize=1024):
     """convert bytes to megabytes, etc.
-      sample code:
-          print('mb= ' + str(bytesto(314575262000000, 'm')))
-      sample output:
-          mb= 300002347.946
-  """
+    sample code:
+        print('mb= ' + str(bytesto(314575262000000, 'm')))
+    sample output:
+        mb= 300002347.946
+    """
 
     a = {"k": 1, "m": 2, "g": 3, "t": 4, "p": 5, "e": 6}
     r = float(bytes)
@@ -78,11 +81,10 @@ def countdown(seconds=1):
     time.sleep(seconds)
 
 
-def chance(value=.20):
+def chance(value=0.20):
     rando = random.random()
     # log.info("prob: " + str(value) + " rolled: " + str(rando))
     return rando < value
-
 
 
 def tobytes(size_str):
@@ -101,21 +103,21 @@ def tobytes(size_str):
     :return: The number of bytes represented by the string.
     """
     multipliers = {
-        'kilobyte':  1024,
-        'megabyte':  1024 ** 2,
-        'gigabyte':  1024 ** 3,
-        'kb': 1024,
-        'mb': 1024**2,
-        'gb': 1024**3,
+        "kilobyte": 1024,
+        "megabyte": 1024 ** 2,
+        "gigabyte": 1024 ** 3,
+        "kb": 1024,
+        "mb": 1024 ** 2,
+        "gb": 1024 ** 3,
     }
 
     for suffix in multipliers:
-        size_str = size_str.lower().strip().strip('s')
+        size_str = size_str.lower().strip().strip("s")
         if size_str.lower().endswith(suffix):
-            return int(float(size_str[0:-len(suffix)]) * multipliers[suffix])
+            return int(float(size_str[0 : -len(suffix)]) * multipliers[suffix])
     else:
-        if size_str.endswith('b'):
+        if size_str.endswith("b"):
             size_str = size_str[0:-1]
-        elif size_str.endswith('byte'):
+        elif size_str.endswith("byte"):
             size_str = size_str[0:-4]
     return int(size_str)
